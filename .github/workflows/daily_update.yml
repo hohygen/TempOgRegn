@@ -1,0 +1,35 @@
+name: Oppdater Frost Kart
+
+on:
+  schedule:
+    # Kjører hver dag kl. 08:00 UTC (som tilsvarer kl. 10:00 norsk sommer tid / 09:00 vintertid)
+    - cron: '0 8 * * *'
+  workflow_dispatch: # Gjør at du også kan kjøre den manuelt fra GitHub-grensesnittet
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Gir tilgang til å oppdatere filer i repoet
+
+    steps:
+      - name: Sjekk ut koden
+        uses: actions/checkout@v4
+
+      - name: Sett opp Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Kjør Python-skriptet
+        env:
+          FROST_CLIENT_ID: ${{ secrets.FROST_CLIENT_ID }}
+        run: |
+          python eksporter_to_siste_maneder_temperatur_avvik.py
+
+      - name: Publisere HTML-filen til GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
+          destination_dir: .
