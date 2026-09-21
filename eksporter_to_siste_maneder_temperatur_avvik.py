@@ -184,7 +184,7 @@ def main() -> None:
     datasett = [hent_datasett(innevarende_maned), hent_datasett(innevarende_maned.forrige())]
     skriv_kart(datasett)
     print(f"Skrev kart til {KARTFIL}")
-    webbrowser.open(KARTFIL.as_uri())
+    #webbrowser.open(KARTFIL.as_uri())
 
 
 if __name__ == "__main__":
